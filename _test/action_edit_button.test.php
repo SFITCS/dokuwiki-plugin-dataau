@@ -3,29 +3,29 @@
  * @group plugin_data
  * @group plugins
  */
-class data_action_plugin_edit_button_test extends DokuWikiTest {
+class dataau_action_plugin_edit_button_test extends DokuWikiTest {
 
-    protected $pluginsEnabled = array('data', 'sqlite');
+    protected $pluginsEnabled = array('dataau, 'sqlite');
 
     function testSetName() {
-        $action = new action_plugin_data();
-        $data = array(
-            'target' => 'plugin_data'
+        $action = new action_plugin_dataau);
+        $dataau= array(
+            'target' => 'plugin_dataau
         );
-        $event = new Doku_Event('', $data);
+        $event = new Doku_Event('', $dataau;
         $action->_editbutton($event, null);
 
-        $this->assertTrue(isset($data['name']));
+        $this->assertTrue(isset($dataau'name']));
     }
 
     function testWrongTarget() {
-        $action = new action_plugin_data();
-        $data = array(
+        $action = new action_plugin_dataau);
+        $dataau= array(
             'target' => 'default target'
         );
-        $action->_editbutton($data, null);
+        $action->_editbutton($dataau null);
 
-        $this->assertFalse(isset($data['name']));
+        $this->assertFalse(isset($dataau'name']));
     }
 
 }

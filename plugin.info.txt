@@ -1,8 +1,8 @@
-base    data
-author  Andreas Gohr
-email   andi@splitbrain.org
-date    2019-03-20
-name    Structured Data Plugin
-desc    Add and query structured data in your wiki
-url     https://www.dokuwiki.org/plugin:data
+base    dataau
+author  Scott Ferguson
+email   scott@scottferguson.com.au
+date    2019-06-24
+name    Structured Data-AU Plugin
+desc    Add and query structured data in your wiki - Forked from Structured Data release 2019-03-20 to support the AU date format dd-mm-yy. 
+url     https://www.dokuwiki.org/plugin:data-au
 

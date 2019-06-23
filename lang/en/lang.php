@@ -1,7 +1,7 @@
 <?php
 
-$lang['menu_alias'] = 'Data Plugin: Field Aliases';
-$lang['menu_clean'] = 'Data Plugin: Clean up database';
+$lang['menu_alias'] = 'Data-AU Plugin: Field Aliases';
+$lang['menu_clean'] = 'Data-AU Plugin: Clean up database';
 
 $lang['pages_del']    = '%d entries removed.';
 $lang['submit_clean'] = 'Clean database!';

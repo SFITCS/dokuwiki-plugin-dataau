@@ -3,12 +3,12 @@
  * @group plugin_data
  * @group plugins
  */
-class helper_plugin_data_test_aliases extends DokuWikiTest {
+class helper_plugin_dataau_test_aliases extends DokuWikiTest {
 
-    protected $pluginsEnabled = array('data', 'sqlite');
+    protected $pluginsEnabled = array('dataau', 'sqlite');
 
     public function testAliases() {
-        $helper = new helper_plugin_data();
+        $helper = new helper_plugin_dataau();
         $db = $helper->_getDB();
         $this->assertTrue($db !== false);
         $db->query("INSERT INTO aliases (name, type, prefix, postfix, enum) VALUES (?,?,?,?,?)",

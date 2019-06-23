@@ -6,9 +6,9 @@ require_once DOKU_INC . 'inc/parser/xhtml.php';
  * @group plugin_data
  * @group plugins
  */
-class syntax_plugin_data_table_test extends DokuWikiTest {
+class syntax_plugin_dataau_table_test extends DokuWikiTest {
 
-    protected $pluginsEnabled = array('data', 'sqlite');
+    protected $pluginsEnabled = array('dataau', 'sqlite');
 
     private $exampleEntry;
 
@@ -28,12 +28,12 @@ class syntax_plugin_data_table_test extends DokuWikiTest {
     }
 
     function testHandle() {
-        $plugin = new syntax_plugin_data_table();
+        $plugin = new syntax_plugin_dataau_table();
 
         $handler = new Doku_Handler();
         $result = $plugin->handle($this->exampleEntry, 0, 10, $handler);
 
-        $data = array(
+        $dataau = array(
             'classes' => 'employees',
             'limit' => 10,
             'dynfilters' => 1,
@@ -120,17 +120,17 @@ class syntax_plugin_data_table_test extends DokuWikiTest {
 ')
                 FROM (
                     SELECT DISTINCT pages.pid AS pid
-                    FROM pages  LEFT JOIN data AS T1 ON T1.pid = pages.pid AND T1.key = 'type'
+                    FROM pages  LEFT JOIN dataau AS T1 ON T1.pid = pages.pid AND T1.key = 'type'
                     WHERE 1 = 1 AND T1.value = 'web development'
                 ) AS W1
-                 LEFT JOIN data AS T1 ON T1.pid = W1.pid AND T1.key = 'employee' LEFT JOIN data AS T2 ON T2.pid = W1.pid AND T2.key = 'deadline' LEFT JOIN data AS T3 ON T3.pid = W1.pid AND T3.key = 'website' LEFT JOIN data AS T4 ON T4.pid = W1.pid AND T4.key = 'volume'
+                 LEFT JOIN dataau AS T1 ON T1.pid = W1.pid AND T1.key = 'employee' LEFT JOIN dataau AS T2 ON T2.pid = W1.pid AND T2.key = 'deadline' LEFT JOIN dataau AS T3 ON T3.pid = W1.pid AND T3.key = 'website' LEFT JOIN dataau AS T4 ON T4.pid = W1.pid AND T4.key = 'volume'
                 LEFT JOIN pages ON W1.pid=pages.pid
                 GROUP BY W1.pid
                 ORDER BY T4.value DESC LIMIT 11",
             'cur_param' => array()
 
 );
-        $this->assertEquals($data, $result, 'Data array corrupted');
+        $this->assertEquals($dataau, $result, 'Data array corrupted');
     }
 
 }

@@ -12,7 +12,7 @@ require_once(DOKU_INC . 'inc/infoutils.php');
 /**
  * This is the base class for all syntax classes, providing some general stuff
  */
-class helper_plugin_data extends DokuWiki_Plugin {
+class helper_plugin_dataau extends DokuWiki_Plugin {
 
     /**
      * @var helper_plugin_sqlite initialized via _getDb()
@@ -40,9 +40,9 @@ class helper_plugin_data extends DokuWiki_Plugin {
 
     private function  loadLocalizedLabels() {
         $lang = array();
-        $path = DOKU_CONF . '/lang/en/data-plugin.php';
+        $path = DOKU_CONF . '/lang/en/dataau-plugin.php';
         if(file_exists($path)) include($path);
-        $path = DOKU_CONF . '/lang/' . $this->determineLang() . '/data-plugin.php';
+        $path = DOKU_CONF . '/lang/' . $this->determineLang() . '/dataau-plugin.php';
         if(file_exists($path)) include($path);
         foreach($lang as $key => $val) {
             $lang[utf8_strtolower($key)] = $val;
@@ -84,10 +84,10 @@ class helper_plugin_data extends DokuWiki_Plugin {
         if($this->db === null) {
             $this->db = plugin_load('helper', 'sqlite');
             if($this->db === null) {
-                msg('The data plugin needs the sqlite plugin', -1);
+                msg('The dataau plugin needs the sqlite plugin', -1);
                 return false;
             }
-            if(!$this->db->init('data', dirname(__FILE__) . '/db/')) {
+            if(!$this->db->init('dataau', dirname(__FILE__) . '/db/')) {
                 $this->db = null;
                 return false;
             }
@@ -116,8 +116,8 @@ class helper_plugin_data extends DokuWiki_Plugin {
         }
         switch($type) {
             case 'dt':
-                if(preg_match('/^(\d\d\d\d)-(\d\d?)-(\d\d?)$/', $value, $m)) {
-                    return sprintf('%d-%02d-%02d', $m[1], $m[2], $m[3]);
+                if(preg_match('/^(\d\d?)-(\d\d?)-(\d\d\d\d)$/', $value, $m)) {
+                    return sprintf('%02d-%02d-%d', $m[1], $m[2], $m[3]);
                 }
                 if($value === '%now%') {
                     return $value;
@@ -307,19 +307,19 @@ class helper_plugin_data extends DokuWiki_Plugin {
                 case 'wiki':
                     global $ID;
                     $oldid = $ID;
-                    list($ID, $data) = explode('|', $val, 2);
+                    list($ID, $dataau) = explode('|', $val, 2);
 
                     //use ID from first value of the multivalued line
-                    if($data == null) {
-                        $data = $ID;
+                    if($dataau == null) {
+                        $dataau = $ID;
                         $ID = $storedID;
                     } else {
                         $storedID = $ID;
                     }
-                    $data = $this->_addPrePostFixes($column['type'], $data);
+                    $dataau = $this->_addPrePostFixes($column['type'], $dataau);
 
                     // Trim document_{start,end}, p_{open,close} from instructions
-                    $allinstructions = p_get_instructions($data);
+                    $allinstructions = p_get_instructions($dataau);
                     $wraps = 1;
                     if(isset($allinstructions[1]) && $allinstructions[1][0] == 'p_open') {
                         $wraps ++;
@@ -503,16 +503,16 @@ class helper_plugin_data extends DokuWiki_Plugin {
     /**
      * Replace placeholders in sql
      */
-    function _replacePlaceholdersInSQL(&$data) {
+    function _replacePlaceholdersInSQL(&$dataau) {
         global $USERINFO;
         // allow current user name in filter:
-        $data['sql'] = str_replace('%user%', $_SERVER['REMOTE_USER'], $data['sql']);
-        $data['sql'] = str_replace('%groups%', implode("','", (array) $USERINFO['grps']), $data['sql']);
+        $dataau['sql'] = str_replace('%user%', $_SERVER['REMOTE_USER'], $dataau['sql']);
+        $dataau['sql'] = str_replace('%groups%', implode("','", (array) $USERINFO['grps']), $dataau['sql']);
         // allow current date in filter:
-        $data['sql'] = str_replace('%now%', dformat(null, '%Y-%m-%d'), $data['sql']);
+        $dataau['sql'] = str_replace('%now%', dformat(null, '%d-%m-%Y'), $dataau['sql']);
 
         // language filter
-        $data['sql'] = $this->makeTranslationReplacement($data['sql']);
+        $dataau['sql'] = $this->makeTranslationReplacement($dataau['sql']);
     }
 
     /**
@@ -521,7 +521,7 @@ class helper_plugin_data extends DokuWiki_Plugin {
      * @param string $data
      * @return string
      */
-    public function makeTranslationReplacement($data) {
+    public function makeTranslationReplacement($dataau) {
         global $conf;
         global $ID;
 
@@ -545,7 +545,7 @@ class helper_plugin_data extends DokuWiki_Plugin {
         } else {
             $values[] = '';
         }
-        return str_replace($patterns, $values, $data);
+        return str_replace($patterns, $values, $dataau);
     }
 
     /**
@@ -603,11 +603,11 @@ class helper_plugin_data extends DokuWiki_Plugin {
         if(isset($_REQUEST['dataflt'])) {
             $cur_params = $this->_a2ua('dataflt', $_REQUEST['dataflt']);
         }
-        if(isset($_REQUEST['datasrt'])) {
-            $cur_params['datasrt'] = $_REQUEST['datasrt'];
+        if(isset($_REQUEST['dataausrt'])) {
+            $cur_params['dataausrt'] = $_REQUEST['dataausrt'];
         }
-        if(isset($_REQUEST['dataofs'])) {
-            $cur_params['dataofs'] = $_REQUEST['dataofs'];
+        if(isset($_REQUEST['dataauofs'])) {
+            $cur_params['dataauofs'] = $_REQUEST['dataauofs'];
         }
 
         //combine key and value
@@ -648,11 +648,11 @@ class helper_plugin_data extends DokuWiki_Plugin {
         $param[] = $column['key'] . "_=$tag";
         $param = $this->_a2ua('dataflt', $param);
 
-        if(isset($_REQUEST['datasrt'])) {
-            $param['datasrt'] = $_REQUEST['datasrt'];
+        if(isset($_REQUEST['dataausrt'])) {
+            $param['dataausrt'] = $_REQUEST['dataausrt'];
         }
-        if(isset($_REQUEST['dataofs'])) {
-            $param['dataofs'] = $_REQUEST['dataofs'];
+        if(isset($_REQUEST['dataauofs'])) {
+            $param['dataauofs'] = $_REQUEST['dataauofs'];
         }
 
         return $param;

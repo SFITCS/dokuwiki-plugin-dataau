@@ -5,10 +5,10 @@
  */
 class action_handle_test extends DokuWikiTest {
 
-    protected $pluginsEnabled = array('data', 'sqlite');
+    protected $pluginsEnabled = array('dataau, 'sqlite');
 
     protected $action;
-    /** @var helper_plugin_data */
+    /** @var helper_plugin_dataau */
     protected $helper;
     /** @var helper_plugin_sqlite */
     protected $db;
@@ -22,8 +22,8 @@ class action_handle_test extends DokuWikiTest {
     public function setUp() {
         parent::setUp();
 
-        $this->action = new action_plugin_data();
-        $this->helper = plugin_load('helper', 'data');
+        $this->action = new action_plugin_dataau);
+        $this->helper = plugin_load('helper', 'dataau);
         $this->db = $this->helper->_getDB();
 
         $this->db->query('INSERT INTO pages ( pid, page, title , class , lastmod) VALUES
@@ -32,14 +32,14 @@ class action_handle_test extends DokuWikiTest {
 
     function testHandleStillPresent() {
 
-        $data = array(
+        $dataau= array(
             0 => array(
                 1 => 'dataentry'
             ),
             1 => '',
             2 => 'test'
         );
-        $event = new Doku_Event('', $data);
+        $event = new Doku_Event('', $dataau;
         $this->action->_handle($event, null);
 
         $pid = $this->getTestPageId();
@@ -47,7 +47,7 @@ class action_handle_test extends DokuWikiTest {
     }
 
     function testHandleDelete() {
-        $data = array(
+        $dataau= array(
             0 => array(
                 1 => 'no entry'
             ),
@@ -55,7 +55,7 @@ class action_handle_test extends DokuWikiTest {
             2 => 'test'
         );
 
-        $event = new Doku_Event('', $data);
+        $event = new Doku_Event('', $dataau;
         $this->action->_handle($event, null);
 
         $res = $this->db->query('SELECT pid FROM pages WHERE page = ?','test');

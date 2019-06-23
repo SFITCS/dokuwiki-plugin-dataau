@@ -10,10 +10,10 @@ if(!defined('DOKU_INC')) die();
 /**
  * Class action_plugin_data
  */
-class action_plugin_data extends DokuWiki_Action_Plugin {
+class action_plugin_dataau extends DokuWiki_Action_Plugin {
 
     /**
-     * will hold the data helper plugin
+     * will hold the dataau helper plugin
      * @var helper_plugin_data
      */
     var $dthlp = null;
@@ -22,7 +22,7 @@ class action_plugin_data extends DokuWiki_Action_Plugin {
      * Constructor. Load helper plugin
      */
     function __construct(){
-        $this->dthlp = plugin_load('helper', 'data');
+        $this->dthlp = plugin_load('helper', 'dataau');
     }
 
     /**
@@ -44,19 +44,19 @@ class action_plugin_data extends DokuWiki_Action_Plugin {
      * @param null       $param
      */
     function _handle(Doku_Event $event, $param){
-        $data = $event->data;
-        if(strpos($data[0][1],'dataentry') !== false) return; // plugin seems still to be there
+        $dataau = $event->dataau;
+        if(strpos($dataau[0][1],'dataentry') !== false) return; // plugin seems still to be there
 
         $sqlite = $this->dthlp->_getDB();
         if(!$sqlite) return;
-        $id = ltrim($data[1].':'.$data[2],':');
+        $id = ltrim($dataau[1].':'.$dataau[2],':');
 
         // get page id
         $res = $sqlite->query('SELECT pid FROM pages WHERE page = ?',$id);
         $pid = (int) $sqlite->res2single($res);
-        if(!$pid) return; // we have no data for this page
+        if(!$pid) return; // we have no dataau for this page
 
-        $sqlite->query('DELETE FROM data WHERE pid = ?',$pid);
+        $sqlite->query('DELETE FROM dataau WHERE pid = ?',$pid);
         $sqlite->query('DELETE FROM pages WHERE pid = ?',$pid);
     }
 
@@ -65,11 +65,11 @@ class action_plugin_data extends DokuWiki_Action_Plugin {
      * @param null       $param
      */
     function _editbutton($event, $param) {
-        if ($event->data['target'] !== 'plugin_data') {
+        if ($event->dataau['target'] !== 'plugin_dataau') {
             return;
         }
 
-        $event->data['name'] = $this->getLang('dataentry');
+        $event->dataau['name'] = $this->getLang('dataentry');
     }
 
     /**
@@ -78,21 +78,21 @@ class action_plugin_data extends DokuWiki_Action_Plugin {
      */
     function _editform(Doku_Event $event, $param) {
         global $TEXT;
-        if ($event->data['target'] !== 'plugin_data') {
+        if ($event->dataau['target'] !== 'plugin_dataau') {
             // Not a data edit
             return;
         }
 
         $event->stopPropagation();
         $event->preventDefault();
-        unset($event->data['intro_locale']);
-        $event->data['media_manager'] = false;
+        unset($event->dataau['intro_locale']);
+        $event->dataau['media_manager'] = false;
 
         echo $this->locale_xhtml('edit_intro' . ($this->getConf('edit_content_only') ? '_contentonly' : ''));
 
-        require_once 'renderer_data_edit.php';
-        $Renderer = new Doku_Renderer_plugin_data_edit();
-        $Renderer->form = $event->data['form'];
+        require_once 'renderer_dataau_edit.php';
+        $Renderer = new Doku_Renderer_plugin_dataau_edit();
+        $Renderer->form = $event->dataau['form'];
 
         // Loop through the instructions
         $instructions = p_get_instructions($TEXT);
@@ -106,20 +106,20 @@ class action_plugin_data extends DokuWiki_Action_Plugin {
      * @param Doku_Event $event
      */
     function _handle_edit_post(Doku_Event $event) {
-        if (!isset($_POST['data_edit'])) {
+        if (!isset($_POST['dataau_edit'])) {
             return;
         }
         global $TEXT;
 
         require_once 'syntax/entry.php';
-        $TEXT = syntax_plugin_data_entry::editToWiki($_POST['data_edit']);
+        $TEXT = syntax_plugin_dataau_entry::editToWiki($_POST['dataau_edit']);
     }
 
     /**
      * @param Doku_Event $event
      */
     function _handle_ajax(Doku_Event $event) {
-        if ($event->data !== 'data_page') {
+        if ($event->dataau !== 'dataau_page') {
             return;
         }
 

@@ -8,12 +8,12 @@
 if(!defined('DOKU_INC')) die();
 
 /**
- * Class syntax_plugin_data_entry
+ * Class syntax_plugin_dataau_entry
  */
-class syntax_plugin_data_entry extends DokuWiki_Syntax_Plugin {
+class syntax_plugin_dataau_entry extends DokuWiki_Syntax_Plugin {
 
     /**
-     * @var helper_plugin_data will hold the data helper plugin
+     * @var helper_plugin_dataau will hold the dataau helper plugin
      */
     var $dthlp = null;
 
@@ -21,8 +21,8 @@ class syntax_plugin_data_entry extends DokuWiki_Syntax_Plugin {
      * Constructor. Load helper plugin
      */
     function __construct() {
-        $this->dthlp = plugin_load('helper', 'data');
-        if(!$this->dthlp) msg('Loading the data helper failed. Make sure the data plugin is installed.', -1);
+        $this->dthlp = plugin_load('helper', 'dataau');
+        if(!$this->dthlp) msg('Loading the dataau helper failed. Make sure the dataau plugin is installed.', -1);
     }
 
     /**
@@ -50,7 +50,7 @@ class syntax_plugin_data_entry extends DokuWiki_Syntax_Plugin {
      * Connect pattern to lexer
      */
     function connectTo($mode) {
-        $this->Lexer->addSpecialPattern('----+ *dataentry(?: [ a-zA-Z0-9_]*)?-+\n.*?\n----+', $mode, 'plugin_data_entry');
+        $this->Lexer->addSpecialPattern('----+ *dataentry(?: [ a-zA-Z0-9_]*)?-+\n.*?\n----+', $mode, 'plugin_dataau_entry');
     }
 
     /**
@@ -73,7 +73,7 @@ class syntax_plugin_data_entry extends DokuWiki_Syntax_Plugin {
         $class = trim($class, '- ');
 
         // parse info
-        $data = array();
+        $dataau = array();
         $columns = array();
         foreach($lines as $line) {
             // ignore comments
@@ -89,27 +89,27 @@ class syntax_plugin_data_entry extends DokuWiki_Syntax_Plugin {
                 $column['comment'] = $matches[2];
             }
             if($column['multi']) {
-                if(!isset($data[$column['key']])) {
+                if(!isset($dataau[$column['key']])) {
                     // init with empty array
                     // Note that multiple occurrences of the field are
                     // practically merged
-                    $data[$column['key']] = array();
+                    $dataau[$column['key']] = array();
                 }
                 $vals = explode(',', $line[1]);
                 foreach($vals as $val) {
                     $val = trim($this->dthlp->_cleanData($val, $column['type']));
                     if($val == '') continue;
-                    if(!in_array($val, $data[$column['key']])) {
-                        $data[$column['key']][] = $val;
+                    if(!in_array($val, $dataau[$column['key']])) {
+                        $dataau[$column['key']][] = $val;
                     }
                 }
             } else {
-                $data[$column['key']] = $this->dthlp->_cleanData($line[1], $column['type']);
+                $dataau[$column['key']] = $this->dthlp->_cleanData($line[1], $column['type']);
             }
             $columns[$column['key']] = $column;
         }
         return array(
-            'data' => $data, 'cols' => $columns, 'classes' => $class,
+            'dataau' => $dataau, 'cols' => $columns, 'classes' => $class,
             'pos' => $pos, 'len' => strlen($match)
         ); // not utf8_strlen
     }
@@ -119,26 +119,26 @@ class syntax_plugin_data_entry extends DokuWiki_Syntax_Plugin {
      *
      * @param   $format   string        output format being rendered
      * @param   $renderer Doku_Renderer the current renderer object
-     * @param   $data     array         data created by handler()
+     * @param   $dataau     array         data created by handler()
      * @return  boolean                 rendered correctly?
      */
-    function render($format, Doku_Renderer $renderer, $data) {
-        if(is_null($data)) return false;
+    function render($format, Doku_Renderer $renderer, $dataau) {
+        if(is_null($dataau)) return false;
         if(!$this->dthlp->ready()) return false;
 
         global $ID;
         switch($format) {
             case 'xhtml':
                 /** @var $renderer Doku_Renderer_xhtml */
-                $this->_showData($data, $renderer);
+                $this->_showData($dataau, $renderer);
                 return true;
             case 'metadata':
                 /** @var $renderer Doku_Renderer_metadata */
-                $this->_saveData($data, $ID, $renderer->meta['title']);
+                $this->_saveData($dataau, $ID, $renderer->meta['title']);
                 return true;
-            case 'plugin_data_edit':
-                /** @var $renderer Doku_Renderer_plugin_data_edit */
-                $this->_editData($data, $renderer);
+            case 'plugin_dataau_edit':
+                /** @var $renderer Doku_Renderer_plugin_dataau_edit */
+                $this->_editData($dataau, $renderer);
                 return true;
             default:
                 return false;
@@ -151,29 +151,29 @@ class syntax_plugin_data_entry extends DokuWiki_Syntax_Plugin {
      * @param array               $data
      * @param Doku_Renderer_xhtml $R
      */
-    function _showData($data, $R) {
+    function _showData($dataau, $R) {
         global $ID;
         $ret = '';
 
-        $sectionEditData = ['target' => 'plugin_data'];
+        $sectionEditData = ['target' => 'plugin_dataau'];
         if (!defined('SEC_EDIT_PATTERN')) {
             // backwards-compatibility for Frusterick Manners (2017-02-19)
-            $sectionEditData = 'plugin_data';
+            $sectionEditData = 'plugin_dataau';
         }
-        $data['classes'] .= ' ' . $R->startSectionEdit($data['pos'], $sectionEditData);
+        $dataau['classes'] .= ' ' . $R->startSectionEdit($dataau['pos'], $sectionEditData);
 
-        $ret .= '<div class="inline dataplugin_entry ' . $data['classes'] . '"><dl>';
+        $ret .= '<div class="inline dataauplugin_entry ' . $dataau['classes'] . '"><dl>';
         $class_names = array();
-        foreach($data['data'] as $key => $val) {
+        foreach($dataau['dataau'] as $key => $val) {
             if($val == '' || !count($val)) continue;
-            $type = $data['cols'][$key]['type'];
+            $type = $dataau['cols'][$key]['type'];
             if(is_array($type)) {
                 $type = $type['type'];
             }
             if($type === 'hidden') continue;
 
             $class_name = hsc(sectionID($key, $class_names));
-            $ret .= '<dt class="' . $class_name . '">' . hsc($data['cols'][$key]['title']) . '<span class="sep">: </span></dt>';
+            $ret .= '<dt class="' . $class_name . '">' . hsc($dataau['cols'][$key]['title']) . '<span class="sep">: </span></dt>';
             $ret .= '<dd class="' . $class_name . '">';
             if(is_array($val)) {
                 $cnt = count($val);
@@ -183,7 +183,7 @@ class syntax_plugin_data_entry extends DokuWiki_Syntax_Plugin {
                             $val[$i] = $ID . '|' . $val[$i];
                             break;
                     }
-                    $ret .= $this->dthlp->_formatData($data['cols'][$key], $val[$i], $R);
+                    $ret .= $this->dthlp->_formatData($dataau['cols'][$key], $val[$i], $R);
                     if($i < $cnt - 1) {
                         $ret .= '<span class="sep">, </span>';
                     }
@@ -194,19 +194,19 @@ class syntax_plugin_data_entry extends DokuWiki_Syntax_Plugin {
                         $val = $ID . '|' . $val;
                         break;
                 }
-                $ret .= $this->dthlp->_formatData($data['cols'][$key], $val, $R);
+                $ret .= $this->dthlp->_formatData($dataau['cols'][$key], $val, $R);
             }
             $ret .= '</dd>';
         }
         $ret .= '</dl></div>';
         $R->doc .= $ret;
-        $R->finishSectionEdit($data['len'] + $data['pos']);
+        $R->finishSectionEdit($dataau['len'] + $dataau['pos']);
     }
 
     /**
      * Save date to the database
      */
-    function _saveData($data, $id, $title) {
+    function _saveData($dataau, $id, $title) {
         $sqlite = $this->dthlp->_getDB();
         if(!$sqlite) return false;
 
@@ -214,7 +214,7 @@ class syntax_plugin_data_entry extends DokuWiki_Syntax_Plugin {
             $title = $id;
         }
 
-        $class = $data['classes'];
+        $class = $dataau['classes'];
 
         // begin transaction
         $sqlite->query("BEGIN TRANSACTION");
@@ -238,7 +238,7 @@ class syntax_plugin_data_entry extends DokuWiki_Syntax_Plugin {
         $sqlite->res_close($res);
 
         if(!$pid) {
-            msg("data plugin: failed saving data", -1);
+            msg("dataau plugin: failed saving data", -1);
             $sqlite->query("ROLLBACK TRANSACTION");
             return false;
         }
@@ -247,7 +247,7 @@ class syntax_plugin_data_entry extends DokuWiki_Syntax_Plugin {
         $sqlite->query("DELETE FROM DATA WHERE pid = ?", $pid);
 
         // insert new data
-        foreach($data['data'] as $key => $val) {
+        foreach($dataau['dataau'] as $key => $val) {
             if(is_array($val)) foreach($val as $v) {
                 $this->replaceQuery(
                     "INSERT INTO DATA (pid, KEY, VALUE) VALUES (?, ?, ?)",
@@ -276,10 +276,10 @@ class syntax_plugin_data_entry extends DokuWiki_Syntax_Plugin {
 
         if($argc > 1) {
             for($i = 1; $i < $argc; $i++) {
-                $data = array();
-                $data['sql'] = $args[$i];
-                $this->dthlp->_replacePlaceholdersInSQL($data);
-                $args[$i] = $data['sql'];
+                $dataau = array();
+                $dataau['sql'] = $args[$i];
+                $this->dthlp->_replacePlaceholdersInSQL($dataau);
+                $args[$i] = $dataau['sql'];
             }
         }
 
@@ -292,31 +292,31 @@ class syntax_plugin_data_entry extends DokuWiki_Syntax_Plugin {
     /**
      * The custom editor for editing data entries
      *
-     * Gets called from action_plugin_data::_editform() where also the form member is attached
+     * Gets called from action_plugin_dataau::_editform() where also the form member is attached
      *
      * @param array                          $data
-     * @param Doku_Renderer_plugin_data_edit $renderer
+     * @param Doku_Renderer_plugin_dataau_edit $renderer
      */
-    function _editData($data, &$renderer) {
+    function _editData($dataau, &$renderer) {
         $renderer->form->startFieldset($this->getLang('dataentry'));
-        $renderer->form->_content[count($renderer->form->_content) - 1]['class'] = 'plugin__data';
+        $renderer->form->_content[count($renderer->form->_content) - 1]['class'] = 'plugin__dataau';
         $renderer->form->addHidden('range', '0-0'); // Adora Belle bugfix
 
         if($this->getConf('edit_content_only')) {
-            $renderer->form->addHidden('data_edit[classes]', $data['classes']);
+            $renderer->form->addHidden('dataau_edit[classes]', $dataau['classes']);
 
             $columns = array('title', 'value', 'comment');
             $class = 'edit_content_only';
 
         } else {
-            $renderer->form->addElement(form_makeField('text', 'data_edit[classes]', $data['classes'], $this->getLang('class'), 'data__classes'));
+            $renderer->form->addElement(form_makeField('text', 'dataau_edit[classes]', $dataau['classes'], $this->getLang('class'), 'dataau__classes'));
 
             $columns = array('title', 'type', 'multi', 'value', 'comment');
             $class = 'edit_all_content';
 
             // New line
-            $data['data'][''] = '';
-            $data['cols'][''] = array('type' => '', 'multi' => false);
+            $dataau['dataau'][''] = '';
+            $dataau['cols'][''] = array('type' => '', 'multi' => false);
         }
 
         $renderer->form->addElement("<table class=\"$class\">");
@@ -331,9 +331,9 @@ class syntax_plugin_data_entry extends DokuWiki_Syntax_Plugin {
 
         //rows
         $n = 0;
-        foreach($data['cols'] as $key => $vals) {
-            $fieldid = 'data_edit[data][' . $n++ . ']';
-            $content = $vals['multi'] ? implode(', ', $data['data'][$key]) : $data['data'][$key];
+        foreach($dataau['cols'] as $key => $vals) {
+            $fieldid = 'dataau_edit[dataau][' . $n++ . ']';
+            $content = $vals['multi'] ? implode(', ', $dataau['dataau'][$key]) : $dataau['dataau'][$key];
             if(is_array($vals['type'])) {
                 $vals['basetype'] = $vals['type']['type'];
                 if(isset($vals['type']['enum'])) {
@@ -358,14 +358,14 @@ class syntax_plugin_data_entry extends DokuWiki_Syntax_Plugin {
                     $content = form_makeListboxField(
                         $fieldid . '[value][]',
                         $values,
-                        $data['data'][$key],
+                        $dataau['dataau'][$key],
                         $vals['title'],
                         '', '',
                         ($vals['multi'] ? array('multiple' => 'multiple') : array())
                     );
                 } else {
-                    $classes = 'data_type_' . $vals['type'] . ($vals['multi'] ? 's' : '') . ' '
-                        . 'data_type_' . $vals['basetype'] . ($vals['multi'] ? 's' : '');
+                    $classes = 'dataau_type_' . $vals['type'] . ($vals['multi'] ? 's' : '') . ' '
+                        . 'dataau_type_' . $vals['basetype'] . ($vals['multi'] ? 's' : '');
 
                     $attr = array();
                     if($vals['basetype'] == 'date' && !$vals['multi']) {
@@ -385,7 +385,7 @@ class syntax_plugin_data_entry extends DokuWiki_Syntax_Plugin {
                 }
                 $renderer->form->addHidden($fieldid . "[title]", $vals['origkey']); //keep key as key, even if title is translated
             } else {
-                $check_data = $vals['multi'] ? array('checked' => 'checked') : array();
+                $check_dataau = $vals['multi'] ? array('checked' => 'checked') : array();
                 $cells = array(
                     form_makeField('text', $fieldid . '[title]', $vals['origkey'], $this->getLang('title')), // when editable, always use the pure key, not a title
                     form_makeMenuField(
@@ -400,9 +400,9 @@ class syntax_plugin_data_entry extends DokuWiki_Syntax_Plugin {
                         $vals['type'],
                         $this->getLang('type')
                     ),
-                    form_makeCheckboxField($fieldid . '[multi]', array('1', ''), $this->getLang('multi'), '', '', $check_data),
+                    form_makeCheckboxField($fieldid . '[multi]', array('1', ''), $this->getLang('multi'), '', '', $check_dataau),
                     form_makeField('text', $fieldid . '[value]', $content, $this->getLang('value')),
-                    form_makeField('text', $fieldid . '[comment]', $vals['comment'], $this->getLang('comment'), '', 'data_comment', array('readonly' => 1, 'title' => $vals['comment']))
+                    form_makeField('text', $fieldid . '[comment]', $vals['comment'], $this->getLang('comment'), '', 'dataau_comment', array('readonly' => 1, 'title' => $vals['comment']))
                 );
             }
 
@@ -432,24 +432,24 @@ class syntax_plugin_data_entry extends DokuWiki_Syntax_Plugin {
     /**
      * Handles the data posted from the editor to recreate the entry syntax
      *
-     * @param array $data data given via POST
+     * @param array $dataau data given via POST
      * @return string
      */
-    public static function editToWiki($data) {
-        $nudata = array();
+    public static function editToWiki($dataau) {
+        $nudataau = array();
 
         $len = 0; // we check the maximum lenght for nice alignment later
-        foreach($data['data'] as $field) {
+        foreach($dataau['dataau'] as $field) {
             if(is_array($field['value'])) {
                 $field['value'] = join(', ', $field['value']);
             }
             $field = array_map('trim', $field);
             if($field['title'] === '') continue;
 
-            $name = syntax_plugin_data_entry::_normalize($field['title']);
+            $name = syntax_plugin_dataau_entry::_normalize($field['title']);
 
             if($field['type'] !== '') {
-                $name .= '_' . syntax_plugin_data_entry::_normalize($field['type']);
+                $name .= '_' . syntax_plugin_dataau_entry::_normalize($field['type']);
             } elseif(substr($name, -1, 1) === 's') {
                 $name .= '_'; // when the field name ends in 's' we need to secure it against being assumed as multi
             }
@@ -458,12 +458,12 @@ class syntax_plugin_data_entry extends DokuWiki_Syntax_Plugin {
                 $name .= 's';
             }
 
-            $nudata[] = array($name, syntax_plugin_data_entry::_normalize($field['value']), $field['comment']);
-            $len = max($len, utf8_strlen($nudata[count($nudata) - 1][0]));
+            $nudataau[] = array($name, syntax_plugin_dataau_entry::_normalize($field['value']), $field['comment']);
+            $len = max($len, utf8_strlen($nudataau[count($nudataau) - 1][0]));
         }
 
-        $ret = '---- dataentry ' . trim($data['classes']) . ' ----' . DOKU_LF;
-        foreach($nudata as $field) {
+        $ret = '---- dataentry ' . trim($dataau['classes']) . ' ----' . DOKU_LF;
+        foreach($nudataau as $field) {
             $ret .= $field[0] . str_repeat(' ', $len + 1 - utf8_strlen($field[0])) . ': ';
             $ret .= $field[1];
             if($field[2] !== '') {

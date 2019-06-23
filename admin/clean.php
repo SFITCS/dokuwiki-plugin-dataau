@@ -1,6 +1,6 @@
 <?php
 /**
- * DokuWiki Plugin data (Admin Component)
+ * DokuWiki Plugin dataau (Admin Component)
  *
  * @license GPL 2 http://www.gnu.org/licenses/gpl-2.0.html
  * @author  Andreas Gohr <gohr@cosmocode.de>
@@ -12,10 +12,10 @@ if (!defined('DOKU_INC')) die();
 /**
  * Let admin remove non-existing pages from sqlite db
  */
-class admin_plugin_data_clean extends DokuWiki_Admin_Plugin {
+class admin_plugin_dataau_clean extends DokuWiki_Admin_Plugin {
 
     /**
-     * will hold the data helper plugin
+     * will hold the dataau helper plugin
      * @var helper_plugin_data
      */
     protected $dthlp = null;
@@ -24,7 +24,7 @@ class admin_plugin_data_clean extends DokuWiki_Admin_Plugin {
      * Constructor. Load helper plugin
      */
     public function __construct(){
-        $this->dthlp = plugin_load('helper', 'data');
+        $this->dthlp = plugin_load('helper', 'dataau');
     }
 
     /**
@@ -60,7 +60,7 @@ class admin_plugin_data_clean extends DokuWiki_Admin_Plugin {
      * Carry out required processing
      */
     public function handle() {
-        if(!isset($_REQUEST['data_go']) || !checkSecurityToken()) return;
+        if(!isset($_REQUEST['dataau_go']) || !checkSecurityToken()) return;
 
         $sqlite = $this->dthlp->_getDB();
         if(!$sqlite) return;
@@ -71,7 +71,7 @@ class admin_plugin_data_clean extends DokuWiki_Admin_Plugin {
         $count = 0;
         foreach($rows as $row){
             if(!page_exists($row['page'])){
-                $sqlite->query('DELETE FROM data WHERE pid = ?',$row['pid']);
+                $sqlite->query('DELETE FROM dataau WHERE pid = ?',$row['pid']);
                 $sqlite->query('DELETE FROM pages WHERE pid = ?',$row['pid']);
                 $count++;
             }
@@ -88,8 +88,8 @@ class admin_plugin_data_clean extends DokuWiki_Admin_Plugin {
         echo $this->locale_xhtml('intro_clean');
 
         $form = new Doku_Form(array('method'=>'post'));
-        $form->addHidden('page','data_clean');
-        $form->addHidden('data_go','go');
+        $form->addHidden('page','dataau_clean');
+        $form->addHidden('dataau_go','go');
 
         $form->addElement(form_makeButton('submit','admin',$this->getLang('submit_clean')));
         $form->printForm();

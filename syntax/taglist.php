@@ -10,18 +10,18 @@
 if(!defined('DOKU_INC')) die();
 
 /**
- * Class syntax_plugin_data_taglist
+ * Class syntax_plugin_dataau_taglist
  */
-class syntax_plugin_data_taglist extends syntax_plugin_data_cloud {
+class syntax_plugin_dataau_taglist extends syntax_plugin_dataau_cloud {
 
     /**
      * Connect pattern to lexer
      */
     function connectTo($mode) {
-        $this->Lexer->addSpecialPattern('----+ *datataglist(?: [ a-zA-Z0-9_]*)?-+\n.*?\n----+', $mode, 'plugin_data_taglist');
+        $this->Lexer->addSpecialPattern('----+ *datataglist(?: [ a-zA-Z0-9_]*)?-+\n.*?\n----+', $mode, 'plugin_dataau_taglist');
     }
 
-    protected $before_item = '<ul class="dataplugin_taglist %s">';
+    protected $before_item = '<ul class="dataauplugin_taglist %s">';
     protected $after_item  = '</ul>';
     protected $before_val  = '<li class="tl">';
     protected $after_val   = '</li>';

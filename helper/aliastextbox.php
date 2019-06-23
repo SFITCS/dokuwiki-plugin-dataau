@@ -1,11 +1,11 @@
 <?php
 /**
- * Class helper_plugin_data_aliastextbox
+ * Class helper_plugin_dataau_aliastextbox
  *
  * Create a field with properties defined by given type alias
  * Mostly this is a single line input field, but for enum type a select field.
  */
-class helper_plugin_data_aliastextbox extends helper_plugin_bureaucracy_field {
+class helper_plugin_dataau_aliastextbox extends helper_plugin_bureaucracyau _field {
 
     private $args;
     private $additional;
@@ -37,12 +37,12 @@ class helper_plugin_data_aliastextbox extends helper_plugin_bureaucracy_field {
     /**
      * Prepare
      *
-     * @param array $args data plugin related field arguments
+     * @param array $args dataau plugin related field arguments
      */
     private function prepareColumns($args) {
-        /** @var helper_plugin_data $dthlp */
-        $dthlp = plugin_load('helper', 'data');
-        if(!$dthlp) msg('Loading the data helper failed. Make sure the data plugin is installed.', -1);
+        /** @var helper_plugin_dataau $dthlp */
+        $dthlp = plugin_load('helper', 'dataau');
+        if(!$dthlp) msg('Loading the dataau helper failed. Make sure the dataau plugin is installed.', -1);
 
         foreach($args as $arg) {
             $arg = $this->replaceTranslation($arg);
@@ -62,8 +62,8 @@ class helper_plugin_data_aliastextbox extends helper_plugin_bureaucracy_field {
             $this->opt['args'] = $values;
             $this->additional = ($datatype['multi'] ? array('multiple' => 'multiple') : array());
         } else {
-            $classes = 'data_type_' . $datatype['type'] .     ($datatype['multi'] ? 's' : '') . ' ' .
-                       'data_type_' . $datatype['basetype'] . ($datatype['multi'] ? 's' : '');
+            $classes = 'dataau_type_' . $datatype['type'] .     ($datatype['multi'] ? 's' : '') . ' ' .
+                       'dataau_type_' . $datatype['basetype'] . ($datatype['multi'] ? 's' : '');
             $content = form_makeTextField('@@NAME@@', '@@VALUE@@', '@@DISPLAY@@', '@@ID@@', '@@CLASS@@ ' . $classes);
 
             $this->tpl = $content;
@@ -95,7 +95,7 @@ class helper_plugin_data_aliastextbox extends helper_plugin_bureaucracy_field {
                 $form->startFieldset('');
             }
             if($this->error) {
-                $params['class'] = 'bureaucracy_error';
+                $params['class'] = 'bureaucracyau _error';
             }
             $params = array_merge($this->opt, $params);
             $params['value'] = preg_split('/\s*,\s*/', $params['value'], -1, PREG_SPLIT_NO_EMPTY);
@@ -128,7 +128,7 @@ class helper_plugin_data_aliastextbox extends helper_plugin_bureaucracy_field {
      * Accepts and validates a posted value.
      *
      * @param string                            $value  The passed value or array or null if none given
-     * @param helper_plugin_bureaucracy_field[] $fields (reference) form fields (POST handled upto $this field)
+     * @param helper_plugin_bureaucracyau _field[] $fields (reference) form fields (POST handled upto $this field)
      * @param int                               $index  index number of field in form
      * @param int                               $formid unique identifier of the form which contains this field
      * @return bool Whether the passed value is valid

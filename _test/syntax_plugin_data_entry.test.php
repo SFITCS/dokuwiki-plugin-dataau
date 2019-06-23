@@ -20,9 +20,9 @@ class Doku_Renderer_xhtml_mock extends Doku_Renderer_xhtml {
  * @group plugin_data
  * @group plugins
  */
-class syntax_plugin_data_entry_test extends DokuWikiTest {
+class syntax_plugin_dataau_entry_test extends DokuWikiTest {
 
-    protected $pluginsEnabled = array('data', 'sqlite');
+    protected $pluginsEnabled = array('dataau', 'sqlite');
 
     private $exampleEntry;
 
@@ -45,7 +45,7 @@ class syntax_plugin_data_entry_test extends DokuWikiTest {
     }
 
     function testHandle() {
-        $plugin = new syntax_plugin_data_entry();
+        $plugin = new syntax_plugin_dataau_entry();
 
         $handler = new Doku_Handler();
         $result = $plugin->handle($this->exampleEntry, 0, 10, $handler);
@@ -53,7 +53,7 @@ class syntax_plugin_data_entry_test extends DokuWikiTest {
         $this->assertEquals(10,         $result['pos'],     'Position has changed');
         $this->assertEquals('projects', $result['classes'], 'wrong class name detected');
 
-        $data = array(
+        $dataau = array(
             'type'     => 'web development',
             'volume'   => '1 Mrd',
             'employee' => array('Joe', 'Jane', 'Jim'),
@@ -65,7 +65,7 @@ class syntax_plugin_data_entry_test extends DokuWikiTest {
             'tests'    => '#5 done',
             '----'     => ''
         );
-        $this->assertEquals($data, $result['data'], 'Data array corrupted');
+        $this->assertEquals($dataau, $result['dataau'], 'Data array corrupted');
 
         $cols = array(
             'type' => $this->createColumnEntry('type', false, 'type', 'type', 'type', false),
@@ -88,13 +88,13 @@ class syntax_plugin_data_entry_test extends DokuWikiTest {
         test1_page: foo
         ----';
 
-        /** @var syntax_plugin_data_entry $plugin */
-        $plugin = plugin_load('syntax','data_entry');
+        /** @var syntax_plugin_dataau_entry $plugin */
+        $plugin = plugin_load('syntax','dataau_entry');
 
         $handler = new Doku_Handler();
-        $data = $plugin->handle($test_entry, 0, 10, $handler);
+        $dataau = $plugin->handle($test_entry, 0, 10, $handler);
         $renderer = new Doku_Renderer_xhtml_mock();
-        $plugin->render('xhtml',$renderer,$data);
+        $plugin->render('xhtml',$renderer,$dataau);
         $result = $renderer->doc;
         $result = substr($result,0,strpos($result,'</internallink>'));
         $result = substr($result,strpos($result,'<internallink>')+14);
@@ -109,13 +109,13 @@ class syntax_plugin_data_entry_test extends DokuWikiTest {
         test1_page: foo|bar
         ----';
 
-        /** @var syntax_plugin_data_entry $plugin */
-        $plugin = plugin_load('syntax','data_entry');
+        /** @var syntax_plugin_dataau_entry $plugin */
+        $plugin = plugin_load('syntax','dataau_entry');
 
         $handler = new Doku_Handler();
-        $data = $plugin->handle($test_entry, 0, 10, $handler);
+        $dataau = $plugin->handle($test_entry, 0, 10, $handler);
         $renderer = new Doku_Renderer_xhtml_mock();
-        $plugin->render('xhtml',$renderer,$data);
+        $plugin->render('xhtml',$renderer,$dataau);
         $result = $renderer->doc;
         $result = substr($result,0,strpos($result,'</internallink>'));
         $result = substr($result,strpos($result,'<internallink>')+14);
@@ -130,13 +130,13 @@ class syntax_plugin_data_entry_test extends DokuWikiTest {
         test1_pageid: foo
         ----';
 
-        /** @var syntax_plugin_data_entry $plugin */
-        $plugin = plugin_load('syntax','data_entry');
+        /** @var syntax_plugin_dataau_entry $plugin */
+        $plugin = plugin_load('syntax','dataau_entry');
 
         $handler = new Doku_Handler();
-        $data = $plugin->handle($test_entry, 0, 10, $handler);
+        $dataau = $plugin->handle($test_entry, 0, 10, $handler);
         $renderer = new Doku_Renderer_xhtml_mock();
-        $plugin->render('xhtml',$renderer,$data);
+        $plugin->render('xhtml',$renderer,$dataau);
         $result = $renderer->doc;
         $result = substr($result,0,strpos($result,'</internallink>'));
         $result = substr($result,strpos($result,'<internallink>')+14);
@@ -151,13 +151,13 @@ class syntax_plugin_data_entry_test extends DokuWikiTest {
         test1_pageid: foo|bar
         ----';
 
-        /** @var syntax_plugin_data_entry $plugin */
-        $plugin = plugin_load('syntax','data_entry');
+        /** @var syntax_plugin_dataau_entry $plugin */
+        $plugin = plugin_load('syntax','dataau_entry');
 
         $handler = new Doku_Handler();
-        $data = $plugin->handle($test_entry, 0, 10, $handler);
+        $dataau = $plugin->handle($test_entry, 0, 10, $handler);
         $renderer = new Doku_Renderer_xhtml_mock();
-        $plugin->render('xhtml',$renderer,$data);
+        $plugin->render('xhtml',$renderer,$dataau);
         $result = $renderer->doc;
         $result = substr($result,0,strpos($result,'</internallink>'));
         $result = substr($result,strpos($result,'<internallink>')+14);
@@ -172,13 +172,13 @@ class syntax_plugin_data_entry_test extends DokuWikiTest {
         test1_title: foo
         ----';
 
-        /** @var syntax_plugin_data_entry $plugin */
-        $plugin = plugin_load('syntax','data_entry');
+        /** @var syntax_plugin_dataau_entry $plugin */
+        $plugin = plugin_load('syntax','dataau_entry');
 
         $handler = new Doku_Handler();
-        $data = $plugin->handle($test_entry, 0, 10, $handler);
+        $dataau = $plugin->handle($test_entry, 0, 10, $handler);
         $renderer = new Doku_Renderer_xhtml_mock();
-        $plugin->render('xhtml',$renderer,$data);
+        $plugin->render('xhtml',$renderer,$dataau);
         $result = $renderer->doc;
         $result = substr($result,0,strpos($result,'</internallink>'));
         $result = substr($result,strpos($result,'<internallink>')+14);
@@ -194,13 +194,13 @@ class syntax_plugin_data_entry_test extends DokuWikiTest {
         test3_title: link:to:page|TitleOfPage
         ----';
 
-        /** @var syntax_plugin_data_entry $plugin */
-        $plugin = plugin_load('syntax','data_entry');
+        /** @var syntax_plugin_dataau_entry $plugin */
+        $plugin = plugin_load('syntax','dataau_entry');
 
         $handler = new Doku_Handler();
-        $data = $plugin->handle($test_entry, 0, 10, $handler);
+        $dataau = $plugin->handle($test_entry, 0, 10, $handler);
         $renderer = new Doku_Renderer_xhtml_mock();
-        $plugin->render('xhtml',$renderer,$data);
+        $plugin->render('xhtml',$renderer,$dataau);
         $result = $renderer->doc;
         $result = substr($result,0,strpos($result,'</internallink>'));
         $result = substr($result,strpos($result,'<internallink>')+14);
@@ -211,9 +211,9 @@ class syntax_plugin_data_entry_test extends DokuWikiTest {
     }
 
     function test_editToWiki() {
-        $data = array(
+        $dataau = array(
             'classes' => 'projects',
-            'data' => array(
+            'dataau' => array(
                 array(
                     'title'   => 'type',
                     'type'    => '',
@@ -288,13 +288,13 @@ class syntax_plugin_data_entry_test extends DokuWikiTest {
             )
         );
 
-        $plugin = new syntax_plugin_data_entry();
-        $this->assertEquals($this->exampleEntry, $plugin->editToWiki($data));
+        $plugin = new syntax_plugin_dataau_entry();
+        $this->assertEquals($this->exampleEntry, $plugin->editToWiki($dataau));
     }
 
 
     function testHandleEmpty() {
-        $plugin = new syntax_plugin_data_entry();
+        $plugin = new syntax_plugin_dataau_entry();
 
         $entry = "---- dataentry projects ----\n"
             . "\n"
@@ -307,10 +307,10 @@ class syntax_plugin_data_entry_test extends DokuWikiTest {
         $this->assertEquals(35,        $result['len'],     'wrong entry length');
         $this->assertEquals('projects', $result['classes'], 'wrong class name detected');
 
-        $data = array(
+        $dataau = array(
             '----'     => ''
         );
-        $this->assertEquals($data, $result['data'], 'Data array corrupted');
+        $this->assertEquals($dataau, $result['dataau'], 'Data array corrupted');
 
         $cols = array(
             '----' => $this->createColumnEntry('----', false, '----', '----', '----', false)
@@ -332,14 +332,14 @@ class syntax_plugin_data_entry_test extends DokuWikiTest {
     function testShowData() {
         $handler = new Doku_Handler();
         $xhtml = new Doku_Renderer_xhtml();
-        $plugin = new syntax_plugin_data_entry();
+        $plugin = new syntax_plugin_dataau_entry();
 
         $result = $plugin->handle($this->exampleEntry, 0, 10, $handler);
 
         $plugin->_showData($result, $xhtml);
         $doc = phpQuery::newDocument($xhtml->doc);
 
-        $this->assertEquals(1, pq('div.inline.dataplugin_entry.projects', $doc)->length);
+        $this->assertEquals(1, pq('div.inline.dataauplugin_entry.projects', $doc)->length);
         $this->assertEquals(1, pq('dl dt.type')->length);
         $this->assertEquals(1, pq('dl dd.type')->length);
         $this->assertEquals(1, pq('dl dt.volume')->length);
@@ -369,7 +369,7 @@ class syntax_plugin_data_entry_test extends DokuWikiTest {
             . "tests_        : \\#5 done\n"
             . "----\n";
 
-        $plugin = new syntax_plugin_data_entry();
+        $plugin = new syntax_plugin_dataau_entry();
 
         $handler = new Doku_Handler();
         $result = $plugin->handle($entry, 0, 10, $handler);
@@ -377,7 +377,7 @@ class syntax_plugin_data_entry_test extends DokuWikiTest {
         $this->assertEquals(10,         $result['pos'],     'Position has changed');
         $this->assertEquals('projects', $result['classes'], 'wrong class name detected');
 
-        $data = array(
+        $dataau = array(
             'volume'   => '1 Mrd',
             'server'   => 'http://www.microsoft.com',
             'website'  => 'http://www.microsoft.com#test',
@@ -385,7 +385,7 @@ class syntax_plugin_data_entry_test extends DokuWikiTest {
             'tests'    => '#5 done',
             '----'     => ''
         );
-        $this->assertEquals($data, $result['data'], 'Data array corrupted');
+        $this->assertEquals($dataau, $result['dataau'], 'Data array corrupted');
 
     }
 }

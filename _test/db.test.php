@@ -6,9 +6,9 @@
  * @group plugins
  * @group slow
  */
-class db_data_entry_test extends DokuWikiTest {
+class db_dataau_entry_test extends DokuWikiTest {
 
-    protected $pluginsEnabled = array('data', 'sqlite',);
+    protected $pluginsEnabled = array('dataau', 'sqlite',);
 
     public static function setUpBeforeClass() {
         parent::setUpBeforeClass();
@@ -37,13 +37,13 @@ class db_data_entry_test extends DokuWikiTest {
         . "cols: %pageid%, test1\n"
         . "filter: test1~ *foo*\n";
 
-        /** @var syntax_plugin_data_entry $plugin */
-        $plugin = plugin_load('syntax','data_table');
+        /** @var syntax_plugin_dataau_entry $plugin */
+        $plugin = plugin_load('syntax','dataau_table');
 
         $handler = new Doku_Handler();
-        $data = $plugin->handle($test_table, 0, 0, $handler);
+        $dataau = $plugin->handle($test_table, 0, 0, $handler);
         $renderer = new Doku_Renderer_xhtml();
-        $plugin->render('xhtml',$renderer,$data);
+        $plugin->render('xhtml',$renderer,$dataau);
 
         $result = $renderer->doc;
 
@@ -66,13 +66,13 @@ class db_data_entry_test extends DokuWikiTest {
             . "cols: %pageid%, test1\n"
             . "filter: test1~ *bar*\n";
 
-        /** @var syntax_plugin_data_entry $plugin */
-        $plugin = plugin_load('syntax','data_table');
+        /** @var syntax_plugin_dataau_entry $plugin */
+        $plugin = plugin_load('syntax','dataau_table');
 
         $handler = new Doku_Handler();
-        $data = $plugin->handle($test_table, 0, 0, $handler);
+        $dataau = $plugin->handle($test_table, 0, 0, $handler);
         $renderer = new Doku_Renderer_xhtml();
-        $plugin->render('xhtml',$renderer,$data);
+        $plugin->render('xhtml',$renderer,$dataau);
 
         $result = $renderer->doc;
 
@@ -94,13 +94,13 @@ class db_data_entry_test extends DokuWikiTest {
             . "cols: %pageid%, test1\n"
             . "filter: test1_title~ *Heading*\n";
 
-        /** @var syntax_plugin_data_entry $plugin */
-        $plugin = plugin_load('syntax','data_table');
+        /** @var syntax_plugin_dataau_entry $plugin */
+        $plugin = plugin_load('syntax','dataau_table');
 
         $handler = new Doku_Handler();
-        $data = $plugin->handle($test_table, 0, 0, $handler);
+        $dataau = $plugin->handle($test_table, 0, 0, $handler);
         $renderer = new Doku_Renderer_xhtml();
-        $plugin->render('xhtml',$renderer,$data);
+        $plugin->render('xhtml',$renderer,$dataau);
 
         $result = $renderer->doc;
 
@@ -124,13 +124,13 @@ class db_data_entry_test extends DokuWikiTest {
         global $ID;
         $ID = 'foo:bar:start';
 
-        /** @var syntax_plugin_data_entry $plugin */
-        $plugin = plugin_load('syntax','data_table');
+        /** @var syntax_plugin_dataau_entry $plugin */
+        $plugin = plugin_load('syntax','dataau_table');
 
         $handler = new Doku_Handler();
-        $data = $plugin->handle($test_table, 0, 0, $handler);
+        $dataau = $plugin->handle($test_table, 0, 0, $handler);
         $renderer = new Doku_Renderer_xhtml();
-        $plugin->render('xhtml',$renderer,$data);
+        $plugin->render('xhtml',$renderer,$dataau);
 
         $result = $renderer->doc;
 

@@ -11,13 +11,13 @@ if(!defined('DOKU_INC')) die();
  * This inherits from the table syntax, because it's basically the
  * same, just different output
  */
-class syntax_plugin_data_list extends syntax_plugin_data_table {
+class syntax_plugin_dataau_list extends syntax_plugin_dataau_table {
 
     /**
      * Connect pattern to lexer
      */
     function connectTo($mode) {
-        $this->Lexer->addSpecialPattern('----+ *datalist(?: [ a-zA-Z0-9_]*)?-+\n.*?\n----+', $mode, 'plugin_data_list');
+        $this->Lexer->addSpecialPattern('----+ *dataaulist(?: [ a-zA-Z0-9_]*)?-+\n.*?\n----+', $mode, 'plugin_dataau_list');
     }
 
     protected $before_item = '<li><div class="li">';
@@ -28,13 +28,13 @@ class syntax_plugin_data_list extends syntax_plugin_data_table {
     /**
      * Before value in listitem
      *
-     * @param array $data  instructions by handler
+     * @param array $dataau  instructions by handler
      * @param int   $colno column number
      * @return string
      */
-    protected function beforeVal(&$data, $colno) {
-        if($data['sepbyheaders'] AND $colno === 0) {
-            return $data['headers'][$colno];
+    protected function beforeVal(&$dataau, $colno) {
+        if($dataau['sepbyheaders'] AND $colno === 0) {
+            return $dataau['headers'][$colno];
         } else {
             return $this->before_val;
         }
@@ -47,9 +47,9 @@ class syntax_plugin_data_list extends syntax_plugin_data_table {
      * @param int   $colno
      * @return string
      */
-    protected function afterVal(&$data, $colno) {
-        if($data['sepbyheaders']) {
-            return $data['headers'][$colno + 1];
+    protected function afterVal(&$dataau, $colno) {
+        if($dataau['sepbyheaders']) {
+            return $dataau['headers'][$colno + 1];
         } else {
             return $this->after_val;
         }
@@ -59,22 +59,22 @@ class syntax_plugin_data_list extends syntax_plugin_data_table {
      * Create list header
      *
      * @param array $clist keys of the columns
-     * @param array $data  instruction by handler
+     * @param array $dataau  instruction by handler
      * @return string html of table header
      */
-    function preList($clist, $data) {
-        return '<div class="dataaggregation"><ul class="dataplugin_list ' . $data['classes'] . '">';
+    function preList($clist, $dataau) {
+        return '<div class="dataaggregation"><ul class="dataauplugin_list ' . $dataau['classes'] . '">';
     }
 
     /**
      * Create an empty list
      *
-     * @param array         $data  instruction by handler()
+     * @param array         $dataau  instruction by handler()
      * @param array         $clist keys of the columns
      * @param Doku_Renderer $R
      */
-    function nullList($data, $clist, $R) {
-        $R->doc .= '<div class="dataaggregation"><p class="dataplugin_list ' . $data['classes'] . '">';
+    function nullList($dataau, $clist, $R) {
+        $R->doc .= '<div class="dataaggregation"><p class="dataauplugin_list ' . $dataau['classes'] . '">';
         $R->cdata($this->getLang('none'));
         $R->doc .= '</p></div>';
     }
@@ -82,11 +82,11 @@ class syntax_plugin_data_list extends syntax_plugin_data_table {
     /**
      * Create list footer
      *
-     * @param array $data   instruction by handler()
+     * @param array $dataau   instruction by handler()
      * @param int   $rowcnt number of rows
      * @return string html of table footer
      */
-    function postList($data, $rowcnt) {
+    function postList($dataau, $rowcnt) {
         return '</ul></div>';
     }
 

@@ -8,13 +8,13 @@
 
 require_once DOKU_INC . 'inc/parser/renderer.php';
 
-class Doku_Renderer_plugin_data_edit extends Doku_Renderer {
+class Doku_Renderer_plugin_dataau_edit extends Doku_Renderer {
     /**
      * @var Doku_Form
      */
     public $form;
 
     function getFormat(){
-        return 'plugin_data_edit';
+        return 'plugin_dataau_edit';
     }
 }

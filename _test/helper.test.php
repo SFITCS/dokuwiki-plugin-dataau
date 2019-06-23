@@ -1,6 +1,6 @@
 <?php
 
-class data_dummy_renderer extends Doku_Renderer_xhtml{
+class dataau_dummy_renderer extends Doku_Renderer_xhtml{
 
     function internallink($id, $title = '', $ignored=null, $ignored2=false, $linktype = 'content') {
         return "link: $id $title";
@@ -12,9 +12,9 @@ class data_dummy_renderer extends Doku_Renderer_xhtml{
  * @group plugin_data
  * @group plugins
  */
-class helper_plugin_data_test extends DokuWikiTest {
+class helper_plugin_dataau_test extends DokuWikiTest {
 
-    protected $pluginsEnabled = array('data', 'sqlite');
+    protected $pluginsEnabled = array('dataau', 'sqlite');
 
     public static function setUpBeforeClass(){
         parent::setUpBeforeClass();
@@ -24,7 +24,7 @@ class helper_plugin_data_test extends DokuWikiTest {
 
     function testCleanData() {
 
-        $helper = new helper_plugin_data();
+        $helper = new helper_plugin_dataau();
 
         $this->assertEquals('', $helper->_cleanData('   ', ''));
         $this->assertEquals('', $helper->_cleanData('', ''));
@@ -61,7 +61,7 @@ class helper_plugin_data_test extends DokuWikiTest {
 
     function testColumn() {
         global $conf;
-        $helper = new helper_plugin_data();
+        $helper = new helper_plugin_dataau();
 
         $this->assertEquals($this->createColumnEntry('type', false, 'type',  'type', 'type', ''), $helper->_column('type'));
         $this->assertEquals($this->createColumnEntry('types', true, 'type',  'type', 'type', ''), $helper->_column('types'));
@@ -84,13 +84,13 @@ class helper_plugin_data_test extends DokuWikiTest {
         $this->assertEquals($this->createColumnEntry('trans_urls', true, 'trans', 'trans', 'Translated Title', 'url'), $helper->_column('trans_urls'));
         // retry in different language
         $conf['lang'] = 'de';
-        $helper = new helper_plugin_data();
+        $helper = new helper_plugin_dataau();
         $this->assertEquals($this->createColumnEntry('trans_urls', true, 'trans', 'trans', 'Übersetzter Titel', 'url'), $helper->_column('trans_urls'));
     }
 
     function testAddPrePostFixes() {
         global $conf;
-        $helper = new helper_plugin_data();
+        $helper = new helper_plugin_dataau();
 
         $this->assertEquals('value', $helper->_addPrePostFixes('', 'value'));
         $this->assertEquals('prevaluepost', $helper->_addPrePostFixes('', 'value', 'pre', 'post'));
@@ -116,7 +116,7 @@ class helper_plugin_data_test extends DokuWikiTest {
     }
 
     function testResolveData() {
-        $helper = new helper_plugin_data();
+        $helper = new helper_plugin_dataau();
 
         $this->assertEquals('tom', $helper->_resolveData('tom', 'name'));
         $this->assertEquals('jerry', $helper->_resolveData('jerry', 'name'));
@@ -130,8 +130,8 @@ class helper_plugin_data_test extends DokuWikiTest {
         global $ID;
         $ID = '';
 
-        $helper = new helper_plugin_data();
-        $renderer = new data_dummy_renderer();
+        $helper = new helper_plugin_dataau();
+        $renderer = new dataau_dummy_renderer();
 
         $this->assertEquals('value1, value2, val',
             $helper->_formatData(array('type' => ''), "value1\n value2\n val", $renderer));
@@ -168,7 +168,7 @@ class helper_plugin_data_test extends DokuWikiTest {
         $this->assertEquals('<a href="' . wl('start', array('dataflt[0]'=>'_=value')) . '" title="Show pages matching \'value\'" class="wikilink1">value</a>',
             $helper->_formatData(array('type' => 'tag'), "value", $renderer));
 
-        $this->assertEquals(strftime('%Y/%m/%d %H:%M', 1234567),
+        $this->assertEquals(strftime('%d/%m/%Y %H:%M', 1234567),
             $helper->_formatData(array('type' => 'timestamp'), "1234567", $renderer));
 
         $this->assertEquals('<strong>bla</strong>',
@@ -181,25 +181,25 @@ class helper_plugin_data_test extends DokuWikiTest {
 
     function testReplacePlaceholdersInSQL() {
         global $USERINFO;
-        $helper = new helper_plugin_data();
+        $helper = new helper_plugin_dataau();
 
-        $data = array('sql' => '%user%');
+        $dataau = array('sql' => '%user%');
         $_SERVER['REMOTE_USER'] = 'test';
-        $helper->_replacePlaceholdersInSQL($data);
-        $this->assertEquals('test', $data['sql']);
+        $helper->_replacePlaceholdersInSQL($dataau);
+        $this->assertEquals('test', $dataau['sql']);
 
-        $data = array('sql' => '%groups%');
+        $dataau = array('sql' => '%groups%');
         $USERINFO['grps'] = array('test','admin');
-        $helper->_replacePlaceholdersInSQL($data);
-        $this->assertEquals("test','admin", $data['sql']);
+        $helper->_replacePlaceholdersInSQL($dataau);
+        $this->assertEquals("test','admin", $dataau['sql']);
 
-        $data = array('sql' => '%now%');
-        $helper->_replacePlaceholdersInSQL($data);
-        $this->assertRegExp('/[0-9]{4}-[0-9]{2}-[0-9]{2}/', $data['sql']);
+        $dataau = array('sql' => '%now%');
+        $helper->_replacePlaceholdersInSQL($dataau);
+        $this->assertRegExp('/[0-9]{4}-[0-9]{2}-[0-9]{2}/', $dataau['sql']);
 
-        $data = array('sql' => '%lang%');
-        $helper->_replacePlaceholdersInSQL($data);
-        $this->assertEquals('en', $data['sql']);
+        $dataau = array('sql' => '%lang%');
+        $helper->_replacePlaceholdersInSQL($dataau);
+        $this->assertEquals('en', $dataau['sql']);
     }
 
     protected function createColumnEntry($name, $multi, $key, $origkey, $title, $type) {
@@ -214,13 +214,13 @@ class helper_plugin_data_test extends DokuWikiTest {
     }
 
     public function testNoSqlPlugin() {
-        $helper = new helper_plugin_data();
+        $helper = new helper_plugin_dataau();
         plugin_disable('sqlite');
         $this->assertFalse($helper->_getDB());
     }
 
     public function testParseFilter() {
-        $helper = new helper_plugin_data();
+        $helper = new helper_plugin_dataau();
 
         $this->assertEquals($this->createFilterArray('name', 'tom', '=', 'name_some', 'some')
             , $helper->_parse_filter('name_some = tom'));
@@ -285,7 +285,7 @@ class helper_plugin_data_test extends DokuWikiTest {
     }
 
     public function testGetFilters() {
-        $helper = new helper_plugin_data();
+        $helper = new helper_plugin_dataau();
 
         $this->assertEquals(array(), $helper->_get_filters());
 
@@ -316,7 +316,7 @@ class helper_plugin_data_test extends DokuWikiTest {
     }
 
     public function testA2UA() {
-        $helper = new helper_plugin_data();
+        $helper = new helper_plugin_dataau();
 
         $array = array(
             'id' => '1',
@@ -332,7 +332,7 @@ class helper_plugin_data_test extends DokuWikiTest {
     }
 
     public function testMakeTranslationReplacement() {
-        $helper = new helper_plugin_data();
+        $helper = new helper_plugin_dataau();
 
         $this->assertEquals('en', $helper->makeTranslationReplacement('%lang%'));
         $this->assertEquals('', $helper->makeTranslationReplacement('%trans%'));

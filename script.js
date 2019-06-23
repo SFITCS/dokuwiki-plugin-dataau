@@ -2,8 +2,8 @@
  * Init datepicker for all date fields
  */
 jQuery(function () {
-    jQuery('.data_type_dt input').datepicker({
-        dateFormat: "yy-mm-dd",
+    jQuery('.dataau_type_dt input').datepicker({
+        dateFormat: "dd-mm-yy",
         changeMonth: true,
         changeYear: true
     });
@@ -25,16 +25,16 @@ jQuery(function () {
     function getAliastype($input) {
         var classes = $input.parent().attr('class').split(' '),
             multi = false,
-            aliastype = 'data_type_page';
+            aliastype = 'dataau_type_page';
 
         jQuery.each(classes, function (i, cls) {
             //skip base type
-            if (cls == 'data_type_page' || cls == 'data_type_pages') {
+            if (cls == 'dataau_type_page' || cls == 'dataau_type_pages') {
                 multi = cls.substr(cls.length-1, 1) == 's';
                 return true;
             }
             //only data types, no other classes
-            if (cls.substr(0, 10) == 'data_type_') {
+            if (cls.substr(0, 10) == 'dataau_type_') {
                 aliastype = cls;
             }
         });
@@ -46,18 +46,18 @@ jQuery(function () {
      * Ajax request for user suggestions
      *
      * @param {Object} request object, with single 'term' property
-     * @param {Function} response callback, argument: the data to suggest to the user.
+     * @param {Function} response callback, argument: the dataau to suggest to the user.
      * @param {Function} getTerm callback, argument: the request Object, returns: search term
      * @param aliastype
      */
     function ajaxsource(request, response, getTerm, aliastype) {
         jQuery.getJSON(
             DOKU_BASE + 'lib/exe/ajax.php', {
-                call: 'data_page',
+                call: 'dataau_page',
                 aliastype: aliastype,
                 search: getTerm(request)
-            }, function (data) {
-                response(jQuery.map(data, function (name, id) {
+            }, function (dataau) {
+                response(jQuery.map(dataau, function (name, id) {
                     return {
                         label: name + ' (' + id + ')',
                         value: id
@@ -79,7 +79,7 @@ jQuery(function () {
     /**
      * pick one user
      */
-    jQuery(".data_type_page input").autocomplete({
+    jQuery(".dataau_type_page input").autocomplete({
         source: function (request, response) {
             ajaxsource(
                 request,
@@ -95,11 +95,11 @@ jQuery(function () {
     /**
      * pick one or more users
      */
-    jQuery(".data_type_pages input")
+    jQuery(".dataau_type_pages input")
         // don't navigate away from the field on tab when selecting an item
         .bind("keydown", function (event) {
             if (event.keyCode === jQuery.ui.keyCode.TAB &&
-                jQuery(this).data("ui-autocomplete").menu.active) {
+                jQuery(this).dataau("ui-autocomplete").menu.active) {
                 event.preventDefault();
             }
         })

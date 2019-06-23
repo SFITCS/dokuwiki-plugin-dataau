@@ -1,6 +1,6 @@
 <?php
 /**
- * DokuWiki Plugin data (Admin Component)
+ * DokuWiki Plugin dataau (Admin Component)
  *
  * @license GPL 2 http://www.gnu.org/licenses/gpl-2.0.html
  * @author  Andreas Gohr <gohr@cosmocode.de>
@@ -12,10 +12,10 @@ if (!defined('DOKU_INC')) die();
 /**
  * Administration form for configuring the type aliases
  */
-class admin_plugin_data_aliases extends DokuWiki_Admin_Plugin {
+class admin_plugin_dataau_aliases extends DokuWiki_Admin_Plugin {
 
     /**
-     * will hold the data helper plugin
+     * will hold the dataau helper plugin
      * @var helper_plugin_data
      */
     protected $dthlp = null;
@@ -24,7 +24,7 @@ class admin_plugin_data_aliases extends DokuWiki_Admin_Plugin {
      * Constructor. Load helper plugin
      */
     public function __construct(){
-        $this->dthlp = plugin_load('helper', 'data');
+        $this->dthlp = plugin_load('helper', 'dataau');
     }
 
     /**
@@ -104,7 +104,7 @@ class admin_plugin_data_aliases extends DokuWiki_Admin_Plugin {
         $rows = $sqlite->res2arr($res);
 
         $form = new Doku_Form(array('method'=>'post'));
-        $form->addHidden('page','data_aliases');
+        $form->addHidden('page','dataau_aliases');
         $form->addElement(
             '<table class="inline">'.
             '<tr>'.
